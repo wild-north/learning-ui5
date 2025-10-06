@@ -5,10 +5,19 @@
 			"completed": true
 		},
 		{
-			"title": "Learn OpenUI5",
+			"title": "Learn SAPUI5",
+			"completed": false
+		},
+		{
+			"title": "Learn Fiori guidelines",
+			"completed": false
+		},
+		{
+			"title": "Learn Fiori Elements",
 			"completed": false
 		}
 	],
 	"itemsRemovable": true,
-	"completedCount": 1
+	"completedCount": 1,
+	"itemsLeftCount": 1
 }

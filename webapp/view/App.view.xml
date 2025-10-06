@@ -8,53 +8,61 @@
 					<f:DynamicPage>
 						<f:header>
 							<f:DynamicPageHeader pinnable="false">
-								<Input class="todoInput" id="addTodoItemInput" value="{/newTodo}" placeholder="{i18n>INPUT_PLACEHOLDER}" change=".addTodo" />
+								<VBox>
+									<Input class="todoInput" id="addTodoItemInput" value="{/newTodo}" placeholder="{i18n>INPUT_PLACEHOLDER}" change=".addTodo" />
+									<Text text="{
+										formatter: '.formatItemsLeft',
+										parts: [
+											'/itemsLeftCount',
+											'i18n>LABEL_ITEMS_LEFT_PLURAL',
+											'i18n>LABEL_ITEMS_LEFT_SINGULAR'
+										]
+									}" textAlign="End" />
+								</VBox>
 							</f:DynamicPageHeader>
 						</f:header>
 						<f:content>
-
 							<List id="todoList"
-								items="{ path: '/todos', events: { change: '.onUpdateItemsLeftCount' } }"
-								mode="None"
-								growing="true"
-								growingScrollToLoad="true"
-								showNoData="false"
-								showSeparators="None">
-								<headerToolbar>
-									<OverflowToolbar id="toolbar" class="sapUiSizeCompact" visible="{= !${view>/isMobile} }">
-										<ToolbarSpacer />
-										<SearchField id="searchTodoItemsInput" liveChange=".onSearch" width="20rem"/>
-										<SegmentedButton selectedKey="all" selectionChange=".onFilter" class="sapMSegmentedButtonNoAutoWidth">
-											<items>
-												<SegmentedButtonItem text="{i18n>LABEL_ALL}" key="all"/>
-												<SegmentedButtonItem text="{i18n>LABEL_ACTIVE}" key="active"/>
-												<SegmentedButtonItem text="{i18n>LABEL_COMPLETED}" key="completed"/>
-											</items>
-										</SegmentedButton>
-										<Button id="clearCompleted" enabled="{/itemsRemovable}" icon="sap-icon://delete" text="{i18n>CLEAR_COMPLETED}" press=".onClearCompleted"/>
-									</OverflowToolbar>
-								</headerToolbar>
-								<infoToolbar>
-									<OverflowToolbar
-										id="filterToolbar"
-										visible="false"
-										active="false">
-										<Label id="filterLabel"/>
-									</OverflowToolbar>
-								</infoToolbar>
-								<CustomListItem>
-									<HBox>
-										<CheckBox selected="{completed}"  />
-										<VBox justifyContent="Center">
-											<Text text="{title}"/>
-										</VBox>
-									</HBox>
-									<customData>
-										<core:CustomData key="todo-item-completed" value="{= String(${completed})}" writeToDom="true" />
-									</customData>
-								</CustomListItem>
-							</List>
-
+									items="{ path: '/todos', events: { change: '.onUpdateItemsLeftCount' } }"
+									mode="None"
+									growing="true"
+									growingScrollToLoad="true"
+									showNoData="false"
+									showSeparators="None">
+									<headerToolbar>
+										<OverflowToolbar id="toolbar" class="sapUiSizeCompact" visible="{= !${view>/isMobile} }">
+											<ToolbarSpacer />
+											<SearchField id="searchTodoItemsInput" liveChange=".onSearch" width="20rem"/>
+											<SegmentedButton selectedKey="all" selectionChange=".onFilter" class="sapMSegmentedButtonNoAutoWidth">
+												<items>
+													<SegmentedButtonItem text="{i18n>LABEL_ALL}" key="all"/>
+													<SegmentedButtonItem text="{i18n>LABEL_ACTIVE}" key="active"/>
+													<SegmentedButtonItem text="{i18n>LABEL_COMPLETED}" key="completed"/>
+												</items>
+											</SegmentedButton>
+											<Button id="clearCompleted" enabled="{/itemsRemovable}" icon="sap-icon://delete" text="{i18n>CLEAR_COMPLETED}" press=".onClearCompleted"/>
+										</OverflowToolbar>
+									</headerToolbar>
+									<infoToolbar>
+										<OverflowToolbar
+											id="filterToolbar"
+											visible="false"
+											active="false">
+											<Label id="filterLabel"/>
+										</OverflowToolbar>
+									</infoToolbar>
+									<CustomListItem>
+										<HBox width="100%" justifyContent="SpaceBetween" alignItems="Center">
+											<CheckBox selected="{completed}" text="{title}"/>
+											<Button icon="sap-icon://delete" 
+													type="Transparent"
+													press=".onDeleteItem"/>
+										</HBox>
+										<customData>
+											<core:CustomData key="todo-item-completed" value="{= String(${completed})}" writeToDom="true" />
+										</customData>
+									</CustomListItem>
+								</List>
 						</f:content>
 					</f:DynamicPage>
 				</content>

@@ -33,7 +33,7 @@ sap.ui.define([
 		 */
 		addTodo() {
 			const oModel = this.getModel();
-			const aTodos = this.getTodos().map((oTodo) => Object.assign({}, oTodo));
+			const aTodos = [...this.getTodos()];
 
 			aTodos.push({
 				title: oModel.getProperty("/newTodo"),
@@ -75,6 +75,7 @@ sap.ui.define([
 		 */
 		getTodos(){
 			const oModel = this.getModel();
+
 			return oModel && oModel.getProperty("/todos") || [];
 		},
 
@@ -83,6 +84,7 @@ sap.ui.define([
 		 */
 		onUpdateItemsLeftCount() {
 			const iItemsLeft = this.getTodos().filter((oTodo) => oTodo.completed !== true).length;
+
 			this.getModel().setProperty("/itemsLeftCount", iItemsLeft);
 		},
 
@@ -159,6 +161,23 @@ sap.ui.define([
 			} else {
 				return "COMPLETED_ITEMS" + (sSearchQuery ? "_CONTAINING" : "");
 			}
+		},
+
+		formatItemsLeft(itemsLeftCount, itemsLeftCountPlural, itemsLeftCountSingular) {
+			return itemsLeftCount === 1 
+				? itemsLeftCountSingular 
+				: itemsLeftCountPlural.replace("{0}", itemsLeftCount);
+		},
+
+		onDeleteItem(oEvent) {
+			const oListItem = oEvent.getSource().getParent();
+			const oTodoToDelete = oListItem.getBindingContext().getObject();
+			
+			const oModel = this.getModel();
+			const aTodos = oModel.getProperty("/todos");
+			const aNewTodos = aTodos.filter(oTodo => oTodo !== oTodoToDelete);
+			
+			oModel.setProperty("/todos", aNewTodos);
 		}
 	});
 
