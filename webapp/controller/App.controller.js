@@ -4,8 +4,9 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"sap/ui/model/json/JSONModel",
-	"sap/base/strings/formatMessage"
-], (Device, Controller, Filter, FilterOperator, JSONModel, formatMessage) => {
+	"sap/base/strings/formatMessage",
+	"sap/m/MessageBox"
+], (Device, Controller, Filter, FilterOperator, JSONModel, formatMessage, MessageBox) => {
 	"use strict";
 
 	return Controller.extend("sap.ui.demo.todo.controller.App", {
@@ -173,6 +174,22 @@ sap.ui.define([
 			const oListItem = oEvent.getSource().getParent();
 			const oTodoToDelete = oListItem.getBindingContext().getObject();
 			
+			if (oTodoToDelete.completed) {
+				this.deleteTodo(oTodoToDelete);
+			} else {
+				MessageBox.confirm(`You're about to delete an active task '${oTodoToDelete.title}'. Are you sure you want to continue?`, {
+					icon: MessageBox.Icon.WARNING,
+					actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+					onClose: (sAction) => {
+						if (sAction === MessageBox.Action.YES) {
+							this.deleteTodo(oTodoToDelete);
+						}
+					}
+				});
+			}
+		},
+
+		deleteTodo(oTodoToDelete) {
 			const oModel = this.getModel();
 			const aTodos = oModel.getProperty("/todos");
 			const aNewTodos = aTodos.filter(oTodo => oTodo !== oTodoToDelete);
