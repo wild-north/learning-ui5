@@ -1,0 +1,4 @@
+li[data-todo-item-completed="true"] .sapMLabelTextWrapper {
+	text-decoration: line-through;
+	color: green;
+}
