@@ -17,7 +17,8 @@
 											'i18n>LABEL_ITEMS_LEFT_PLURAL',
 											'i18n>LABEL_ITEMS_LEFT_SINGULAR'
 										]
-									}" textAlign="End" />
+									}" textAlign="End"
+									class="sapUiSmallMarginTop" />
 								</VBox>
 							</f:DynamicPageHeader>
 						</f:header>
@@ -53,10 +54,33 @@
 									</infoToolbar>
 									<CustomListItem>
 										<HBox width="100%" justifyContent="SpaceBetween" alignItems="Center">
-											<CheckBox selected="{completed}" text="{title}"/>
-											<Button icon="sap-icon://delete" 
-													type="Transparent"
-													press=".onDeleteItem"/>
+											<HBox alignItems="Center">
+												<!-- <CheckBox selected="{completed}" visible="{= !${isEditing} }"/>
+												<Text text="{title}" visible="{= !${isEditing} }"/> -->
+												<CheckBox 
+													text="{title}" 
+													selected="{completed}" 
+													visible="{= !${isEditing} }"/>
+												<Input value="{draftData>/editingTodo/title}" visible="{= ${isEditing} }"/>
+												<HBox>
+													<Button icon="sap-icon://save" 
+															type="Transparent"
+															press=".onSaveEditedItem"
+															visible="{= ${isEditing} }"/>
+													<Button icon="sap-icon://cancel" 
+															type="Transparent"
+															press=".onCancelEditedItem"
+															visible="{= ${isEditing} }"/>
+												</HBox>
+											</HBox>
+											<HBox>
+												<Button icon="sap-icon://edit" 
+														type="Transparent"
+														press=".onSetEditModeForItem"/>
+												<Button icon="sap-icon://delete" 
+														type="Transparent"
+														press=".onDeleteItem"/>
+											</HBox>
 										</HBox>
 										<customData>
 											<core:CustomData key="todo-item-completed" value="{= String(${completed})}" writeToDom="true" />

@@ -1,3 +1,5 @@
+
+
 sap.ui.define([
 	"sap/ui/Device",
 	"sap/ui/core/mvc/Controller",
@@ -10,7 +12,6 @@ sap.ui.define([
 	"use strict";
 
 	return Controller.extend("sap.ui.demo.todo.controller.App", {
-
 		onInit() {
 			this.aSearchFilters = [];
 			this.aTabFilters = [];
@@ -34,14 +35,15 @@ sap.ui.define([
 		 */
 		addTodo() {
 			const oModel = this.getModel();
-			const aTodos = [...this.getTodos()];
+			const aTodoList = [...this.getTodos()];
 
-			aTodos.push({
+			aTodoList.push({
+				id: Date.now(),
 				title: oModel.getProperty("/newTodo"),
 				completed: false
 			});
 
-			oModel.setProperty("/todos", aTodos);
+			oModel.setProperty("/todos", aTodoList);
 			oModel.setProperty("/newTodo", "");
 		},
 
@@ -49,22 +51,22 @@ sap.ui.define([
 		 * Trigger removal of all completed items from the todo list.
 		 */
 		onClearCompleted() {
-			const aTodos = this.getTodos().map((oTodo) => Object.assign({}, oTodo));
-			this.removeCompletedTodos(aTodos);
-			this.getModel().setProperty("/todos", aTodos);
+			const aTodoList = this.getTodos().map((oTodo) => Object.assign({}, oTodo));
+			this.removeCompletedTodos(aTodoList);
+			this.getModel().setProperty("/todos", aTodoList);
 		},
 
 		/**
 		 * Removes all completed items from the given todos.
 		 *
-		 * @param {object[]} aTodos
+		 * @param {object[]} aTodoList
 		 */
-		removeCompletedTodos(aTodos) {
-			let i = aTodos.length;
+		removeCompletedTodos(aTodoList) {
+			let i = aTodoList.length;
 			while (i--) {
-				const oTodo = aTodos[i];
+				const oTodo = aTodoList[i];
 				if (oTodo.completed) {
-					aTodos.splice(i, 1);
+					aTodoList.splice(i, 1);
 				}
 			}
 		},
@@ -171,31 +173,95 @@ sap.ui.define([
 		},
 
 		onDeleteItem(oEvent) {
-			const oListItem = oEvent.getSource().getParent();
-			const oTodoToDelete = oListItem.getBindingContext().getObject();
+			const oTodo = this._getTodoFromEvent(oEvent);
 			
-			if (oTodoToDelete.completed) {
-				this.deleteTodo(oTodoToDelete);
-			} else {
-				MessageBox.confirm(`You're about to delete an active task '${oTodoToDelete.title}'. Are you sure you want to continue?`, {
-					icon: MessageBox.Icon.WARNING,
-					actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-					onClose: (sAction) => {
-						if (sAction === MessageBox.Action.YES) {
-							this.deleteTodo(oTodoToDelete);
-						}
-					}
-				});
+			if (oTodo.completed) {
+				this._deleteTodo(oTodo);
+
+				return;
 			}
+
+			MessageBox.confirm(`You're about to delete an active task '${oTodo.title}'. Are you sure you want to continue?`, {
+				icon: MessageBox.Icon.WARNING,
+				actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+				onClose: (sAction) => {
+					if (sAction === MessageBox.Action.YES) {
+						this._deleteTodo(oTodo);
+					}
+				}
+			});
 		},
 
-		deleteTodo(oTodoToDelete) {
-			const oModel = this.getModel();
-			const aTodos = oModel.getProperty("/todos");
-			const aNewTodos = aTodos.filter(oTodo => oTodo !== oTodoToDelete);
-			
-			oModel.setProperty("/todos", aNewTodos);
-		}
-	});
+	onSetEditModeForItem(oEvent) {
+		const oTodo = this._getTodoFromEvent(oEvent);
+		const oDraftModel = this.getView().getModel("draftData");
+		
+		oDraftModel.setProperty("/editingTodo", {
+			index: this._getTodoIndex(oTodo),
+			title: oTodo.title,
+			completed: oTodo.completed
+		});
+		
+		this._updateTodoProperty(oTodo, "isEditing", true);
+	},
 
+	onSaveEditedItem(oEvent) {
+		const oTodo = this._getTodoFromEvent(oEvent);
+		const oDraftModel = this.getView().getModel("draftData");
+		const oEditedTodo = oDraftModel.getProperty("/editingTodo");
+		
+		this._updateTodoProperty(oTodo, "title", oEditedTodo.title);
+		this._updateTodoProperty(oTodo, "isEditing", false);
+		
+		this._clearDraft();
+	},
+
+	onCancelEditedItem(oEvent) {
+		const oTodo = this._getTodoFromEvent(oEvent);
+		
+		this._updateTodoProperty(oTodo, "isEditing", false);
+		this._clearDraft();
+	},
+
+	_deleteTodo(oTodo) {
+		const oModel = this.getModel();
+		const aTodoList = oModel.getProperty("/todos");
+		const aNewTodoList = aTodoList.filter(todo => todo !== oTodo);
+		
+		oModel.setProperty("/todos", aNewTodoList);
+	},
+
+	_getTodoFromEvent(oEvent) {
+		const oListItem = oEvent.getSource().getParent();
+
+		return oListItem.getBindingContext().getObject();
+	},
+
+	_getTodoIndex(oTodo) {
+		const aTodoList = this.getModel().getProperty("/todos");
+
+		return aTodoList.indexOf(oTodo);
+	},
+
+	_updateTodoProperty(oTodo, sProperty, vValue) {
+		const oModel = this.getModel();
+		const aTodoList = oModel.getProperty("/todos");
+		const iIndex = aTodoList.indexOf(oTodo);
+		
+		if (iIndex !== -1) {
+			aTodoList[iIndex][sProperty] = vValue;
+			oModel.setProperty("/todos", aTodoList);
+		}
+	},
+
+	_clearDraft() {
+		const oDraftModel = this.getView().getModel("draftData");
+
+		oDraftModel.setProperty("/editingTodo", {
+			index: null,
+			title: "",
+			completed: false
+		});
+	}
+	});
 });

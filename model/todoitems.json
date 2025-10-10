@@ -1,20 +1,29 @@
 {
 	"newTodo": "",
-	"todos": [{
+	"todos": [
+		{
+			"id": 1,
 			"title": "Start this app",
-			"completed": true
+			"completed": true,
+			"isEditing": false
 		},
 		{
+			"id": 2,
 			"title": "Learn SAPUI5",
-			"completed": false
+			"completed": false,
+			"isEditing": false
 		},
 		{
+			"id": 3,
 			"title": "Learn Fiori guidelines",
-			"completed": false
+			"completed": false,
+			"isEditing": false
 		},
 		{
+			"id": 4,
 			"title": "Learn Fiori Elements",
-			"completed": false
+			"completed": false,
+			"isEditing": false
 		}
 	],
 	"itemsRemovable": true,

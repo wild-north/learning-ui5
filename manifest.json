@@ -42,6 +42,10 @@
       "": {
         "type": "sap.ui.model.json.JSONModel",
         "uri": "model/todoitems.json"
+      },
+      "draftData": {
+        "type": "sap.ui.model.json.JSONModel",
+        "uri": "model/draftData.json"
       }
     },
     "resources": {
