@@ -1,0 +1,2 @@
+sap.ui.define([],()=>{"use strict";return{formatItemsLeft(e,t,r){return e===1?r:t.replace("{0}",e)},formatDate(e){if(!e){return""}const t=new Date(e);return t.toLocaleDateString()}}});
+//# sourceMappingURL=formatter.js.map

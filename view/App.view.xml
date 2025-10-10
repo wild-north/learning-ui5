@@ -10,15 +10,21 @@
 							<f:DynamicPageHeader pinnable="false">
 								<VBox>
 									<Input class="todoInput" id="addTodoItemInput" value="{/newTodo}" placeholder="{i18n>INPUT_PLACEHOLDER}" change=".addTodo" />
-									<Text text="{
-										formatter: '.formatItemsLeft',
-										parts: [
-											'/itemsLeftCount',
-											'i18n>LABEL_ITEMS_LEFT_PLURAL',
-											'i18n>LABEL_ITEMS_LEFT_SINGULAR'
-										]
-									}" textAlign="End"
-									class="sapUiSmallMarginTop" />
+									<Text 
+										xmlns:core="sap.ui.core"
+										core:require="{
+											Formatter: 'sap/ui/demo/todo/model/formatter'
+										}"
+										text="{
+											formatter: 'Formatter.formatItemsLeft',
+											parts: [
+												'/itemsLeftCount',
+												'i18n>LABEL_ITEMS_LEFT_PLURAL',
+												'i18n>LABEL_ITEMS_LEFT_SINGULAR'
+											]
+										}" 
+										textAlign="End"
+										class="sapUiSmallMarginTop" />
 								</VBox>
 							</f:DynamicPageHeader>
 						</f:header>
@@ -54,13 +60,23 @@
 									</infoToolbar>
 									<CustomListItem>
 										<HBox width="100%" justifyContent="SpaceBetween" alignItems="Center">
-											<HBox alignItems="Center">
-												<!-- <CheckBox selected="{completed}" visible="{= !${isEditing} }"/>
-												<Text text="{title}" visible="{= !${isEditing} }"/> -->
+											<HBox alignItems="Start">
 												<CheckBox 
-													text="{title}" 
 													selected="{completed}" 
 													visible="{= !${isEditing} }"/>
+												<VBox visible="{= !${isEditing} }">
+													<Text text="{title}" class="todoTitle"/>
+													<Text 
+														xmlns:core="sap.ui.core"
+														core:require="{
+															Formatter: 'sap/ui/demo/todo/model/formatter'
+														}"
+														text="{
+															path: 'createdAt', 
+															formatter: 'Formatter.formatDate'
+														}" 
+														class="sapUiTinyText todoDate"/>
+												</VBox>
 												<Input value="{draftData>/editingTodo/title}" visible="{= ${isEditing} }"/>
 												<HBox>
 													<Button icon="sap-icon://save" 

@@ -166,12 +166,6 @@ sap.ui.define([
 			}
 		},
 
-		formatItemsLeft(itemsLeftCount, itemsLeftCountPlural, itemsLeftCountSingular) {
-			return itemsLeftCount === 1 
-				? itemsLeftCountSingular 
-				: itemsLeftCountPlural.replace("{0}", itemsLeftCount);
-		},
-
 		onDeleteItem(oEvent) {
 			const oTodo = this._getTodoFromEvent(oEvent);
 			
@@ -192,76 +186,76 @@ sap.ui.define([
 			});
 		},
 
-	onSetEditModeForItem(oEvent) {
-		const oTodo = this._getTodoFromEvent(oEvent);
-		const oDraftModel = this.getView().getModel("draftData");
-		
-		oDraftModel.setProperty("/editingTodo", {
-			index: this._getTodoIndex(oTodo),
-			title: oTodo.title,
-			completed: oTodo.completed
-		});
-		
-		this._updateTodoProperty(oTodo, "isEditing", true);
-	},
+		onSetEditModeForItem(oEvent) {
+			const oTodo = this._getTodoFromEvent(oEvent);
+			const oDraftModel = this.getView().getModel("draftData");
+			
+			oDraftModel.setProperty("/editingTodo", {
+				index: this._getTodoIndex(oTodo),
+				title: oTodo.title,
+				completed: oTodo.completed
+			});
+			
+			this._updateTodoProperty(oTodo, "isEditing", true);
+		},
 
-	onSaveEditedItem(oEvent) {
-		const oTodo = this._getTodoFromEvent(oEvent);
-		const oDraftModel = this.getView().getModel("draftData");
-		const oEditedTodo = oDraftModel.getProperty("/editingTodo");
-		
-		this._updateTodoProperty(oTodo, "title", oEditedTodo.title);
-		this._updateTodoProperty(oTodo, "isEditing", false);
-		
-		this._clearDraft();
-	},
+		onSaveEditedItem(oEvent) {
+			const oTodo = this._getTodoFromEvent(oEvent);
+			const oDraftModel = this.getView().getModel("draftData");
+			const oEditedTodo = oDraftModel.getProperty("/editingTodo");
+			
+			this._updateTodoProperty(oTodo, "title", oEditedTodo.title);
+			this._updateTodoProperty(oTodo, "isEditing", false);
+			
+			this._clearDraft();
+		},
 
-	onCancelEditedItem(oEvent) {
-		const oTodo = this._getTodoFromEvent(oEvent);
-		
-		this._updateTodoProperty(oTodo, "isEditing", false);
-		this._clearDraft();
-	},
+		onCancelEditedItem(oEvent) {
+			const oTodo = this._getTodoFromEvent(oEvent);
+			
+			this._updateTodoProperty(oTodo, "isEditing", false);
+			this._clearDraft();
+		},
 
-	_deleteTodo(oTodo) {
-		const oModel = this.getModel();
-		const aTodoList = oModel.getProperty("/todos");
-		const aNewTodoList = aTodoList.filter(todo => todo !== oTodo);
-		
-		oModel.setProperty("/todos", aNewTodoList);
-	},
+		_deleteTodo(oTodo) {
+			const oModel = this.getModel();
+			const aTodoList = oModel.getProperty("/todos");
+			const aNewTodoList = aTodoList.filter(todo => todo !== oTodo);
+			
+			oModel.setProperty("/todos", aNewTodoList);
+		},
 
-	_getTodoFromEvent(oEvent) {
-		const oListItem = oEvent.getSource().getParent();
+		_getTodoFromEvent(oEvent) {
+			const oListItem = oEvent.getSource().getParent();
 
-		return oListItem.getBindingContext().getObject();
-	},
+			return oListItem.getBindingContext().getObject();
+		},
 
-	_getTodoIndex(oTodo) {
-		const aTodoList = this.getModel().getProperty("/todos");
+		_getTodoIndex(oTodo) {
+			const aTodoList = this.getModel().getProperty("/todos");
 
-		return aTodoList.indexOf(oTodo);
-	},
+			return aTodoList.indexOf(oTodo);
+		},
 
-	_updateTodoProperty(oTodo, sProperty, vValue) {
-		const oModel = this.getModel();
-		const aTodoList = oModel.getProperty("/todos");
-		const iIndex = aTodoList.indexOf(oTodo);
-		
-		if (iIndex !== -1) {
-			aTodoList[iIndex][sProperty] = vValue;
-			oModel.setProperty("/todos", aTodoList);
+		_updateTodoProperty(oTodo, sProperty, vValue) {
+			const oModel = this.getModel();
+			const aTodoList = oModel.getProperty("/todos");
+			const iIndex = aTodoList.indexOf(oTodo);
+			
+			if (iIndex !== -1) {
+				aTodoList[iIndex][sProperty] = vValue;
+				oModel.setProperty("/todos", aTodoList);
+			}
+		},
+
+		_clearDraft() {
+			const oDraftModel = this.getView().getModel("draftData");
+
+			oDraftModel.setProperty("/editingTodo", {
+				index: null,
+				title: "",
+				completed: false
+			});
 		}
-	},
-
-	_clearDraft() {
-		const oDraftModel = this.getView().getModel("draftData");
-
-		oDraftModel.setProperty("/editingTodo", {
-			index: null,
-			title: "",
-			completed: false
-		});
-	}
 	});
 });
