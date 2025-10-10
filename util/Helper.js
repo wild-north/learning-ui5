@@ -1,2 +1,2 @@
-sap.ui.define(["require"],e=>{"use strict";return{resolvePath(r){return e.toUrl("../")+r}}});
+sap.ui.define(["require"],x=>{"use strict";return{resolvePath(r){return x.toUrl("../")+r},generateUUID(){if(typeof crypto!=="undefined"&&crypto.randomUUID){return crypto.randomUUID()}return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,x=>{const r=Math.random()*16|0;const e=x==="x"?r:r&3|8;return e.toString(16)})}}});
 //# sourceMappingURL=Helper.js.map

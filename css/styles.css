@@ -1,14 +1,24 @@
 .todoTitle {
-    margin-top: 1rem;
+    margin-top: 0;
+    font-weight: 500;
 }
 
-li[data-todo-item-completed="true"] .todoDate,
-li[data-todo-item-completed="true"] .todoTitle {
+tr[data-todo-item-completed="true"] .todoTitle {
     color: #999;
-    font-style: italic;
+    text-decoration: line-through;
     opacity: 0.7;
 }
 
-li[data-todo-item-completed="true"] .todoTitle {
-    text-decoration: line-through;
+tr[data-todo-item-completed="true"] .sapMText {
+    color: #999;
+    opacity: 0.7;
+}
+
+.sapMListTbl .sapMLIB.sapMListTblRow:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+}
+
+.sapMListTbl .sapMLIB.sapMListTblRow:active {
+    background-color: rgba(0, 0, 0, 0.06);
 }

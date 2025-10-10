@@ -1,2 +1,2 @@
-sap.ui.define([],()=>{"use strict";return{formatItemsLeft(e,t,r){return e===1?r:t.replace("{0}",e)},formatDate(e){if(!e){return""}const t=new Date(e);return t.toLocaleDateString()}}});
+sap.ui.define([],()=>{"use strict";return{formatItemsLeft(t,e,r){return t===1?r:e.replace("{0}",t)},formatDate(t){if(!t){return""}const e=new Date(t);return e.toLocaleDateString()},formatStatusText(t){return t?"Completed":"Active"},formatStatusState(t){return t?"Success":"Information"}}});
 //# sourceMappingURL=formatter.js.map

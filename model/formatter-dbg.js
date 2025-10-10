@@ -8,14 +8,22 @@ sap.ui.define([], () => {
 				: itemsLeftCountPlural.replace("{0}", itemsLeftCount);
 		},
 
-        formatDate(date) {
+		formatDate(date) {
 			if (!date) {
-                return "";
-            }
+				return "";
+			}
 
 			const d = new Date(date);
 
 			return d.toLocaleDateString();
+		},
+
+		formatStatusText(completed) {
+			return completed ? "Completed" : "Active";
+		},
+
+		formatStatusState(completed) {
+			return completed ? "Success" : "Information";
 		}
 	};
 });
