@@ -284,14 +284,20 @@ onChange={(e) => setValue(e.target.value)}
    }
    ```
 
-3. Відобразити дату у View:
+3. Відобразити дату у View (замінити CheckBox на VBox):
    ```xml
    <VBox>
-       <Text text="{title}"/>
+       <CheckBox text="{title}" 
+                 selected="{completed}" 
+                 visible="{= !${isEditing} }"/>
        <Text text="{path: 'createdAt', formatter: '.formatDate'}" 
-             class="sapUiTinyText"/>
+             class="sapUiTinyText sapUiTinyMarginBegin"/>
+       <Input value="{draftData>/editingTodo/title}" 
+              visible="{= ${isEditing} }"/>
    </VBox>
    ```
+   
+   Примітка: VBox дозволяє розмістити CheckBox та дату вертикально. Дата відображається під заголовком завдання.
 
 #### 🎯 Очікуваний результат:
 Під кожним завданням відображається дата та час створення в читабельному форматі.

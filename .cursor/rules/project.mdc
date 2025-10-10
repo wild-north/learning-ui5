@@ -1,3 +1,6 @@
+---
+alwaysApply: true
+---
 # SAPUI5 Todo App Project Rules
 
 ## Code Style
@@ -7,9 +10,14 @@
 - Follow SAPUI5 naming conventions: controllers end with `.controller.js`, views with `.view.xml`
 
 ## SAPUI5 Specifics
+- **ALWAYS verify SAPUI5 functionality through Context7 MCP before implementation**
+  - Use `mcp_context7_resolve-library-id` with "SAPUI5" to get library ID `/sap-docs/sapui5`
+  - Use `mcp_context7_get-library-docs` with relevant topic to get up-to-date documentation
+  - Check official docs for best practices, modern approaches, and breaking changes
 - Always use `sap.ui.define` for module definition
 - Use arrow functions in controllers where appropriate
 - Prefer declarative XML views over programmatic UI creation
+- Prefer modern `core:require` approach in XML views over controller imports for formatters/utilities
 - Use data binding instead of manual DOM manipulation
 - Follow Model-View-Controller (MVC) pattern strictly
 
@@ -42,9 +50,11 @@
 - Utilities: `webapp/util/`
 - Tests: `webapp/test/`
 
-## Dependencies
-- Use Context7 MCP for up-to-date library documentation
-- Check SAPUI5 official docs before implementing features
+## Dependencies & Documentation
+- **MANDATORY: Use Context7 MCP for SAPUI5 documentation** 
+  - Never implement SAPUI5 features based on assumptions
+  - Always fetch latest docs with proper topic keywords
+  - Verify best practices and modern approaches (e.g., `core:require` vs controller imports)
 - Keep package.json dependencies up to date via Renovate
 
 ## Communication
@@ -52,3 +62,5 @@
 - Use "ти" (informal) when addressing the user
 - Keep explanations clear and concise
 - Explain technical concepts with React parallels when relevant
+
+AND PLEASE, THINK HARDER.
